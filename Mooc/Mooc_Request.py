@@ -63,7 +63,7 @@ def request_post(url, data, decoding='utf8'):
 @request_decorate()
 def request_head(url):
     '''head请求'''
-    req = request.Request(url=url);
+    req = request.Request(url=url)
     response = request.urlopen(req, timeout=TIMEOUT)
     header =  dict(response.getheaders())
     response.close()
@@ -72,6 +72,6 @@ def request_head(url):
 @request_decorate(1)
 def request_check(url):
     '''检查url是否可以访问'''
-    req = request.Request(url=url);
+    req = request.Request(url=url)
     response = request.urlopen(req, timeout=TIMEOUT//10)
     response.close()
