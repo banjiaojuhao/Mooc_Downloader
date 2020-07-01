@@ -10,6 +10,7 @@ from Mooc.Mooc_Base import *
 from Mooc.Mooc_Download import *
 from Mooc.Mooc_Request import *
 from Mooc.Mooc_Potplayer import *
+from Mooc.Mooc_Config import DEBUG_QUALITY
 
 __all__ = [
     "Icourse163_Base"
@@ -34,8 +35,10 @@ class Icourse163_Base(Mooc_Base):
     def set_mode(self):
         while True:
             try:
-                instr = input("请输入一个0-4的数选择性下载内容(1:超高清, 2:高清, 3:标清, 4:仅下载课件) [0退出]: ")
-                # instr = '1'
+                if DEBUG_QUALITY == "":
+                    instr = input("请输入一个0-4的数选择性下载内容(1:超高清, 2:高清, 3:标清, 4:仅下载课件) [0退出]: ")
+                else:
+                    instr = DEBUG_QUALITY
                 if not instr:
                     continue
                 try:

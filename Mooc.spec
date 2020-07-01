@@ -7,8 +7,7 @@ a = Analysis(['Mooc\\Mooc_Main.py'],
              pathex=['.'],
              binaries=[],
              datas=[
-              ('Mooc\\aria2c.exe', '.'),
-              ('Mooc\\Alipay.jpg', '.')
+              ('Mooc\\aria2c.exe', '.')
              ],
              hiddenimports=[],
              hookspath=[],
