@@ -4,8 +4,6 @@
 
 import os
 
-from Mooc.Mooc_Config import DEBUG_URL
-
 if __package__ is None:
     import sys
 

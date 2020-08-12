@@ -6,8 +6,9 @@ import os
 import re
 import sys
 
-# DEBUG_URL = "https://next.xuetangx.com/course/MITX07011000210/3945253"
+# DEBUG_URL = "https://www.icourse163.org/course/tufc-1206039802?tid=1206345201"
 DEBUG_URL = ""
+# DEBUG_QUALITY = "1"
 DEBUG_QUALITY = ""
 
 COOKIE_FILE = "cookie.txt"
@@ -49,7 +50,9 @@ courses_re = {
 }
 
 __all__ = [
-    "COOKIE_FILE", "PATH", "winre", "TIMEOUT", "PLAYLIST", "PALYBACK",
+    "DEBUG_QUALITY", "DEBUG_URL",
+    "COOKIE_FILE",
+    "PATH", "winre", "TIMEOUT", "PLAYLIST", "PALYBACK",
     "BATNAME", "BATSTRING", "LENGTH", "WIN_LENGTH",
 
     "download_speed", "aria2_path", "aira2_cmd", "courses_re"
