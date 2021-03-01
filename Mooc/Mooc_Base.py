@@ -98,6 +98,10 @@ class Mooc_Base(ABC):
     def download_video(cls, video_url, video_name, video_dir):
         '''下载 MP4 视频文件'''
         succeed = True
+        video_dir: str
+        video_name: str
+        video_dir = video_dir.replace('"', "")
+        video_name = video_name.replace('"', "")
         if not cls.judge_file_existed(video_dir, video_name, '.mp4'):
             try:
                 header = request_head(video_url)
@@ -115,6 +119,10 @@ class Mooc_Base(ABC):
     def download_pdf(cls, pdf_url, pdf_name, pdf_dir):
         '''下载 PDF '''
         succeed = True
+        pdf_url: str
+        pdf_name: str
+        pdf_url = pdf_url.replace('"', "")
+        pdf_name = pdf_name.replace('"', "")
         if not cls.judge_file_existed(pdf_dir, pdf_name, '.pdf'):
             try:
                 aria2_download_file(pdf_url, pdf_name + '.pdf', pdf_dir)
@@ -130,6 +138,10 @@ class Mooc_Base(ABC):
     def download_sub(cls, sub_url, sub_name, sub_dir):
         '''下载字幕'''
         succeed = True
+        sub_url: str
+        sub_name: str
+        sub_url = sub_url.replace('"', "")
+        sub_name = sub_name.replace('"', "")
         if not cls.judge_file_existed(sub_dir, sub_name, '.srt'):
             try:
                 aria2_download_file(sub_url, sub_name + '.srt', sub_dir)
