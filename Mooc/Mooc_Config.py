@@ -6,10 +6,10 @@ import os
 import re
 import sys
 
-# DEBUG_URL = "https://www.icourse163.org/course/tufc-1206039802?tid=1206345201"
+# DEBUG_URL = "https://www.icourse163.org/course/HIT-154005?tid=1450314458"
 DEBUG_URL = ""
-# DEBUG_QUALITY = "1"
-DEBUG_QUALITY = ""
+DEBUG_QUALITY = "1"
+# DEBUG_QUALITY = ""
 
 COOKIE_FILE = "cookie.txt"
 
@@ -40,6 +40,7 @@ else:
     aria2_path = os.path.join(PATH, "aria2c.exe")
 aira2_cmd = '%s -x 16 -s 64 -j 64 -k 2M --disk-cache 128M {header} "{url:}" -d "{dirname:}" -o "{filename:}"' % (
     aria2_path,)
+m3u8_cmd = 'ffmpeg -i "{url:}" -c copy -bsf:a aac_adtstoasc {filename:}'
 
 # 课程链接的正则匹配
 courses_re = {
@@ -55,5 +56,5 @@ __all__ = [
     "PATH", "winre", "TIMEOUT", "PLAYLIST", "PALYBACK",
     "BATNAME", "BATSTRING", "LENGTH", "WIN_LENGTH",
 
-    "download_speed", "aria2_path", "aira2_cmd", "courses_re"
+    "download_speed", "aria2_path", "aira2_cmd", "m3u8_cmd", "courses_re"
 ]

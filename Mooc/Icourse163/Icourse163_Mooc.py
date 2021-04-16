@@ -4,6 +4,7 @@
 
 import os
 import re
+import requests
 
 if __package__ is None:
     import sys
@@ -18,6 +19,13 @@ from Mooc.Icourse163.Icourse163_Base import *
 __all__ = [
     "Icourse163_Mooc"
 ]
+
+headers = {
+    "Cookie": 'CLIENT_IP=223.73.111.130; close_topBar=1; learningplan1033945722=false; EDUWEBDEVICE=1a537df538364d24aa67e234f00d2821; WM_TID=F6XXK73EiNFBFRAUABYuOvnB6nX7oNPH; __yadk_uid=qhQatWaunFkPJOvXbBTSUAfbLTVD4U99; Hm_lvt_77dc9a9d49448cf5e629e5bebaa5500b=1614521104,1614568902; bpmns=1; hasVolume=true; videoVolume=0.8; CLIENT_IP=223.73.111.130; MOOC_PRIVACY_INFO_APPROVED=true; __utmz=63145271.1614671680.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmc=63145271; __utma=63145271.544993581.1614671680.1614671680.1614671680.1; videoRate=2; WM_NI=pBaJF1QQ7XSeMkXLDoAFp%2BOVwo%2FzIFjpJKfcWx46v0FBjAyHNiuuvaD6R8QeTetJ4aYLBuIvjeApiRZ9wigsEAk1Qi6NW5mc5gC29f8WwJ3qCSZrCzR530zVJTho%2B1fvNW0%3D; WM_NIKE=9ca17ae2e6ffcda170e2e6eed2e474bc88aaccee72ace78eb7d15b868f8f85f56d868ab69ab763a5b68f98aa2af0fea7c3b92ab49eafabc53b938ff9b9d26f8fb598adc765839ac0ccce5eb5b1e19bcc4eaab086ace56995a8fcd7f53c869ea6a2fc448eb7bb96f56b88ea9ed9d46f98bbbcabb76b9b948e96cc7eaabb8f91ec5a9ae7b98ae679879fa5d2d463f69299d6f069f7b98dd3bc6efc89b9abb27b818d9693c27292ebfdd1f95e8a8ca890aa3ba6aa82b8b337e2a3; STUDY_WTR="sedyD6vu/2SQ9WvXFwkmSPD/SNwUYww/6hoXuEaokpGP0vZm4ljMcpCziOTlWgC7j9IiIq3PLZOw7Dfp6aDzH60dTXOBITAuRINrecku/H4="; NTESSTUDYSI=4587d91fe1b546f895bd41bb96044809; STUDY_SESS="MoVrdaFLzD7KR5qnYGpOQeIw+KF6RAvMKCHGmg5MvfBRB6uMZjEzYH9uIj2+s6xYASLGRx9l6cUSG89VLPgvciON16+S18cW3pq0GQ3JlyLgEcR11jpM+B0ysNfhR5sAkeqiAflwBoZ1vR3L4SGwkwmF/MxDq/2SEs1H+owKPr7pp0KAU1uxVfhNAsnqVYbV+P6MxCmnJEvne6pPMc9TTJJnThNrM7aj0X5LVpSBvjY+jLUkiE0tBwSGBJj2yGvmCj7amAaDbJJnC264ceZEklEbRRmZ7J82Zgp4KqVxxrBKlOh/Gwx6G1S/X4FQ7qd/vJK/atoXOXkc3/E+/0gD2JhOkBORJAZW8xlFI7iAqScYDQgUHxPU94Uw2p0fb10Y"; STUDY_INFO=UID_A8F428A4978FE3077D81BC8D2CF7C31E|4|1033945722|1615024103560; NETEASE_WDA_UID=1033945722#|#1511769393763; Hm_lpvt_77dc9a9d49448cf5e629e5bebaa5500b=1615024108',
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
+}
+
+csrf_key = headers["Cookie"].split("NTESSTUDYSI=")[1].split(";")[0].strip()
 
 
 class Icourse163_Mooc(Icourse163_Base):
@@ -64,7 +72,7 @@ class Icourse163_Mooc(Icourse163_Base):
             return
         self.title = self.term_id = None
         url = self.course_url + self.cid
-        text = request_get(url)
+        text = requests.get(url).text
         match = re.search(r'termId : "(\d+)"', text)
         if match:
             self.term_id = match.group(1)
@@ -78,7 +86,8 @@ class Icourse163_Mooc(Icourse163_Base):
             return
         self.infos = {}
         self.infos_data['c0-param0'] = 'number:' + self.term_id
-        text = request_post(self.infos_url, self.infos_data, decoding='unicode_escape')
+        # text = request_post(self.infos_url, self.infos_data, decoding='unicode_escape')
+        text = requests.post(url=self.infos_url, data=self.infos_data).content.decode("unicode_escape")
         chapters = re.findall(r'homeworks=\w+;.+?id=(\d+).+?name="((.|\n)+?)";', text)
         for i, chapter in enumerate(chapters, 1):
             chapter_title = winre.sub('', '{' + str(i) + '}--' + chapter[1])[:WIN_LENGTH]
@@ -105,7 +114,8 @@ class Icourse163_Mooc(Icourse163_Base):
         self.parse_data['c0-param0'] = params[0]
         self.parse_data['c0-param1'] = params[1]
         self.parse_data['c0-param3'] = params[2]
-        text = request_post(self.parse_url, self.parse_data, decoding='unicode_escape')
+        # text = request_post(self.parse_url, self.parse_data, decoding='unicode_escape')
+        text = requests.post(url=self.parse_url, data=self.parse_data).content.decode("unicode_escape")
         return text
 
     def _get_pdf_url(self, params):
@@ -117,8 +127,44 @@ class Icourse163_Mooc(Icourse163_Base):
         return pdf_url
 
     def _get_video_url(self, params):
-        text = self._get_source_text(params)
-        sub_match = re.search(r'name=".+";.*url="(.*?)"', text)
+        try:
+            resp = requests.post(
+                url="https://www.icourse163.org/web/j/resourceRpcBean.getResourceToken.rpc?csrfKey=" + csrf_key,
+                data={
+                    "bizId": params[2],
+                    "bizType": "1",
+                    "contentType": "1",
+
+                },
+                headers=headers).json()
+        except Exception as err:
+            print(err)
+        signature = resp["result"]["videoSignDto"]["signature"]
+        resp = requests.get(url="https://vod.study.163.com/eds/api/v1/vod/video",
+                            params={
+                                "videoId": params[0],
+                                "signature": signature,
+                                "clientType": "1"
+                            },
+                            headers=headers).json()
+
+        # text = self._get_source_text(params)
+        # sub_match = re.search(r'name=".+";.*url="(.*?)"', text)
+        try:
+            resp_result_videos = resp["result"]["videos"]
+            if resp_result_videos[0]["format"] == "hls":
+                # m3u8 case
+                # resp_result_videos.sort(lambda x: x["quality"])
+                video_url = resp_result_videos[-1]["videoUrl"]
+            else:
+                video_url = resp_result_videos[2]["videoUrl"]
+        except Exception as err:
+            # error when video is m3u8
+            print("failed to parse video url")
+            print(resp)
+
+        return video_url, None
+
         video_url = sub_url = None
         if sub_match:
             sub_url = sub_match.group(1)

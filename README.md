@@ -8,3 +8,8 @@
 - 移除下载速度限制
 - 修复host错误造成的下载失败
 - 添加自定义cookie支持
+- 添加对m3u8格式支持（需要将ffmpeg添加进PATH）
+
+# todo
+- m3u8下载加速（自己下载后用ffmpeg合并）
+- rust重写项目

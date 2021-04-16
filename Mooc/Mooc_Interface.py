@@ -66,24 +66,25 @@ def mooc_interface():
                         print('"{}" 还未开课！'.format(mooc.title))
                     input("请按回车键返回主界面...")
                     break
-                except (RequestFailed, DownloadFailed) as err:
-                    if isinstance(err, RequestFailed):
-                        print("网路请求异常！")
-                    else:
-                        print("文件下载异常！")
-                    if inquire():
-                        continue
-                    else:
-                        break
+                # except (RequestFailed, DownloadFailed) as err:
+                #     if isinstance(err, RequestFailed):
+                #         print("网路请求异常！")
+                #     else:
+                #         print("文件下载异常！")
+                #     if inquire():
+                #         continue
+                #     else:
+                #         break
                 except KeyboardInterrupt:
                     print()
                     if inquire():
                         continue
                     else:
                         break
-                except:
-                    print("程序异常退出，希望反馈作者！")
-                    return
+                # except Exception as err:
+                #     print(err)
+                #     print("程序异常退出，希望反馈作者！")
+                #     return
     except KeyboardInterrupt:
         input("程序退出...")
     finally:

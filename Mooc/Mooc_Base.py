@@ -1,13 +1,11 @@
-'''
-    Mooc 的虚基类：用于派生所有Mooc子类
-'''
 
 import os
 from abc import ABC, abstractmethod
 
 from Mooc.Mooc_Config import *
 from Mooc.Mooc_Download import *
-from Mooc.Mooc_Request import *
+from Mooc.Mooc_Download import m3u8_download_file
+import requests
 
 __all__ = [
     "Mooc_Base"
@@ -104,10 +102,13 @@ class Mooc_Base(ABC):
         video_name = video_name.replace('"', "")
         if not cls.judge_file_existed(video_dir, video_name, '.mp4'):
             try:
-                header = request_head(video_url)
-                size = float(header['Content-Length']) / (1024 * 1024)
-                print("  |-{}  [mp4] 大小: {:.2f}M".format(cls.align(video_name, LENGTH), size))
-                aria2_download_file(video_url, video_name + '.mp4', video_dir)
+                print("  |-{}  [mp4]".format(cls.align(video_name, LENGTH)))
+                if ".m3u8" in video_url:
+                    # download m3u8
+                    m3u8_download_file(video_url, video_name + '.mp4', video_dir)
+                    pass
+                else:
+                    aria2_download_file(video_url, video_name + '.mp4', video_dir)
             except DownloadFailed:
                 print("  |-{}  [mp4] 资源无法下载！".format(cls.align(video_name, LENGTH)))
                 succeed = False

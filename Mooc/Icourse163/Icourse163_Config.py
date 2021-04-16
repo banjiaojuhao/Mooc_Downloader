@@ -5,3 +5,6 @@
 COURSENAME = '{1}--课程'
 IS_SHD, IS_HD, IS_SD, ONLY_PDF = 1, 2, 3, 4
 LEN_S = 96
+
+with open("cookie-icourse163", "w") as f:
+    f.write("hello")
