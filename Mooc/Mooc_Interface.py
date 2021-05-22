@@ -61,7 +61,8 @@ def mooc_interface():
                     if isdownload:
                         print('"{}" 下载完毕!'.format(mooc.title))
                         print("下载路径: {}".format(mooc.rootDir))
-                        os.startfile(mooc.rootDir)
+                        if os.name == 'nt':
+                            os.startfile(mooc.rootDir)
                     else:
                         print('"{}" 还未开课！'.format(mooc.title))
                     input("请按回车键返回主界面...")

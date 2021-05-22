@@ -34,13 +34,10 @@ LENGTH = 80
 
 # 变量，可修改的参数
 download_speed = "1248K"
-if getattr(sys, 'frozen', False):  # 是否打包
-    aria2_path = os.path.join(sys._MEIPASS, "aria2c.exe")
-else:
-    aria2_path = os.path.join(PATH, "aria2c.exe")
+aria2_path = os.path.join(PATH, "aria2c.exe") if os.name == 'nt' else "aria2c"
 aira2_cmd = '%s -x 16 -s 64 -j 64 -k 2M --disk-cache 128M {header} "{url:}" -d "{dirname:}" -o "{filename:}"' % (
     aria2_path,)
-m3u8_cmd = 'ffmpeg -i "{url:}" -c copy -bsf:a aac_adtstoasc {filename:}'
+m3u8_cmd = 'ffmpeg -i "{url:}" {filename:}'
 
 # 课程链接的正则匹配
 courses_re = {
